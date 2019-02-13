@@ -147,7 +147,7 @@ def get_maxima(im, threshold, sort=False):
     return points
 
 
-def anms(H, n=100, c=0.9, use_thresh=True):
+def anms(H, n=100, c=0.9, use_thresh=True, zipped=False):
     if use_thresh:
         thresh = H.mean() + H.std()
     else:
@@ -163,10 +163,10 @@ def anms(H, n=100, c=0.9, use_thresh=True):
                 rmin = d
         anms_maxima.append((u, v, rmin))
     anms_maxima.sort(key=lambda v: v[2], reverse=True)
-    return anms_maxima[:n]
+    return _maxima_to_uv(anms_maxima[:n], zipped)
 
 
-def anms_kdtree(H, n=100, c=0.9, use_thresh=True):
+def anms_kdtree(H, n=100, c=0.9, use_thresh=True, zipped=False):
     # Set threshold to filter out weak corners
     if use_thresh:
         thresh = H.mean() + H.std()
@@ -205,4 +205,12 @@ def anms_kdtree(H, n=100, c=0.9, use_thresh=True):
                 anms_maxima.append((u, v, dist[0, -1]))
                 break
     anms_maxima.sort(key=lambda v: v[2], reverse=True)
-    return anms_maxima[:n]
+    return _maxima_to_uv(anms_maxima[:n], zipped)
+
+
+def _maxima_to_uv(maxima, zipped):
+    if not zipped:
+        u = np.array([mi[0] for mi in maxima])
+        v = np.array([mi[1] for mi in maxima])
+        return u, v
+    return np.array([(mi[0], mi[1]) for mi in maxima])
