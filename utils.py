@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numba import jit
 import numpy as np
 from scipy.spatial import cKDTree as KDTree
 
@@ -11,6 +12,7 @@ def imgshow(img, cmap="gray", figsize=(10, 10), title="", show=True):
         plt.show()
 
 
+@jit(nopython=True)
 def _convolve(g, h):
     # The radius in pixels of the kernel about its central point
     radius = h.shape[0] // 2
