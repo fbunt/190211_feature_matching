@@ -9,7 +9,6 @@ def imgshow(img, cmap="gray", figsize=(10, 10), title="", show=True):
     plt.title(title)
     if show:
         plt.show()
-    return plt.gca()
 
 
 def _convolve(g, h):
