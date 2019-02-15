@@ -166,8 +166,9 @@ def anms(H, n=100, c=0.9, use_thresh=True, zipped=False):
     return _maxima_to_uv(anms_maxima[:n], zipped)
 
 
-def anms_kdtree(H, n=100, c=0.9, use_thresh=True, zipped=False):
+def anms_kdtree(H, n=100, c=0.9, edge=10, use_thresh=True, zipped=False):
     # Set threshold to filter out weak corners
+    H = H[edge:-edge, edge:-edge]
     if use_thresh:
         thresh = H.mean() + H.std()
     else:
@@ -202,7 +203,7 @@ def anms_kdtree(H, n=100, c=0.9, use_thresh=True, zipped=False):
             hneighbor = mh[ind[0, -1]]
             # ANMS selection condition
             if h < c * hneighbor:
-                anms_maxima.append((u, v, dist[0, -1]))
+                anms_maxima.append((u+edge, v+edge, dist[0, -1]))
                 break
     anms_maxima.sort(key=lambda v: v[2], reverse=True)
     return _maxima_to_uv(anms_maxima[:n], zipped)
